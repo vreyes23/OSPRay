@@ -27,6 +27,8 @@
 // num seconds we're sending back and forth
 #define NUM_SECONDS 10
 
+#include <unistd.h>
+
 namespace ospray {
   
   int numTerminated = 0;
