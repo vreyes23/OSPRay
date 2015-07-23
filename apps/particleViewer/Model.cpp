@@ -20,10 +20,19 @@ extern int  yyparse();
 extern void yyerror(const char* msg);
 extern FILE *yyin;
 extern int yydebug;
-
+//Added Global Variables colr colg colb to add control in making the colors that are required for project.--Victor Reyes
+float colr=0;
+float colg=0;
+float colb=0;
 namespace ospray {
   namespace particle {
-    
+    //created Function for actual color creation.--Victor Reyes
+    inline vec3f makeOurColor(const int i)
+    {
+      return vec3f(colr,
+                   colg,
+                   colb);
+    }
     inline vec3f makeRandomColor(const int i)
     {
       const int mx = 13*17*43;
@@ -39,9 +48,19 @@ namespace ospray {
     {
       if (atomTypeByName.find(name) == atomTypeByName.end()) {
         std::cout << "Found atom type '"+name+"'" << std::endl;
-        AtomType *a = new AtomType(name);
+ 
+
+
+
+	//modified what function it calls in order to get the color makeOurColor vs makeRandomColor
+	if((colr == 0)&&(colg == 0)&&(colb == 0)){
         a->color = makeRandomColor(atomType.size());
-        atomTypeByName[name] = atomType.size();
+	}
+        else{
+	a->color = makeOurColor(atomType.size());
+	}
+	atomTypeByName[name] = atomType.size();
+	
         atomType.push_back(a);
       }
       return atomTypeByName[name];
@@ -79,6 +98,11 @@ namespace ospray {
                     &a.position.x,&a.position.y,&a.position.z,
                     &n.x,&n.y,&n.z
                     );
+	//read color values read in.---Victor Reyes
+	colr= n.x;
+	colg=n.y;
+	colb=n.z;
+	
         // rc = fscanf(file,"%100s %f %f %f %f %f %f\n",atomName,
         //             &a.position.x,&a.position.y,&a.position.z,
         //             &n.x,&n.y,&n.z
